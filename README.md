@@ -21,7 +21,7 @@ Then you're right where you want to be!
 
 ## How?
 
-This library tokenises code using Prism and provides a small render-props-driven
+This library tokenises code using Prism and provides two ways - a hook and a small render-props-driven
 component to quickly render it out into React. This is why it even works with
 React Native! It's bundled with a modified version of Prism that won't pollute
 the global namespace and comes with
@@ -81,6 +81,8 @@ yarn add prism-react-renderer
 
 <img src="./.readme/basic.png" width="237" alt="Screenshot showing highlighted code block" />
 
+### Using Component -
+
 ```jsx
 import React from "react";
 import { render } from "react-dom";
@@ -113,11 +115,59 @@ render((
 );
 ```
 
-`<Highlight />` is the only component exposed by this package, as inspired by
+`<Highlight />` is the main component exposed by this package, as inspired by
 [downshift](https://github.com/paypal/downshift).
 
+### Using hooks -
+
+```jsx
+import React from "react";
+import { render } from "react-dom";
+import { useHighlight, defaultProps } from "prism-react-renderer";
+
+const exampleCode = `
+(function someDemo() {
+  var test = "Hello World!";
+  console.log(test);
+})();
+
+return () => <App />;
+`;
+
+function HighlightConsumer() {
+  const {
+    className,
+    style,
+    tokens,
+    getLineProps,
+    getTokenProps,
+  } = useHighlight({
+    ...defaultProps,
+    code: exampleCode,
+    language: "jsx",
+  });
+
+  return (
+    <pre className={className} style={style}>
+      {tokens.map((line, i) => (
+        <div {...getLineProps({ line, key: i })}>
+          {line.map((token, key) => (
+            <span {...getTokenProps({ token, key })} />
+          ))}
+        </div>
+      ))}
+    </pre>
+  );
+}
+
+render((
+  <HighlightConsumer />,
+  document.getElementById('root')
+);
+```
+
 It also exports a `defaultProps` object which for basic usage can simply be spread
-onto the `<Highlight />` component. It also provides some default theming.
+onto the `<Highlight />` component or `useHighlight` hook. It also provides some default theming.
 
 It doesn't render anything itself, it just calls the render function and renders that.
 ["Use a render prop!"](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce)!
