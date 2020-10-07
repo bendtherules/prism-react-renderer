@@ -17,9 +17,9 @@ import type {
   LineOutputProps,
   TokenInputProps,
   TokenOutputProps,
-  RenderProps,
   PrismLib,
   PrismTheme,
+  RenderProps,
 } from "../types";
 
 type Props = {
@@ -29,7 +29,7 @@ type Props = {
   code: string,
 };
 
-function useHighlight(args: Props) {
+function useHighlight(args: Props): RenderProps {
   const { Prism, theme, language, code } = args;
 
   const themeDict = useMemo(() => {
