@@ -69,53 +69,63 @@ function useHighlight(args: Props) {
     [themeDict]
   );
 
-  const getStyleForToken = ({ types, empty }: Token) => {
-    const typesSize = types.length;
+  const getStyleForToken = useCallback(
+    ({ types, empty }: Token) => {
+      const typesSize = types.length;
 
-    if (themeDict === undefined) {
-      return undefined;
-    } else if (typesSize === 1 && types[0] === "plain") {
-      return empty ? { display: "inline-block" } : undefined;
-    } else if (typesSize === 1 && !empty) {
-      return themeDict[types[0]];
-    }
+      if (themeDict === undefined) {
+        return undefined;
+      } else if (typesSize === 1 && types[0] === "plain") {
+        return empty ? { display: "inline-block" } : undefined;
+      } else if (typesSize === 1 && !empty) {
+        return themeDict[types[0]];
+      }
 
-    const baseStyle = empty ? { display: "inline-block" } : {};
-    // $FlowFixMe
-    const typeStyles = types.map((type) => themeDict[type]);
-    return Object.assign(baseStyle, ...typeStyles);
-  };
+      const baseStyle = empty ? { display: "inline-block" } : {};
+      // $FlowFixMe
+      const typeStyles = types.map((type) => themeDict[type]);
+      return Object.assign(baseStyle, ...typeStyles);
+    },
+    [themeDict]
+  );
 
-  const getTokenProps = ({
-    key,
-    className,
-    style,
-    token,
-    ...rest
-  }: TokenInputProps): TokenOutputProps => {
-    const output: TokenOutputProps = {
-      ...rest,
-      className: `token ${token.types.join(" ")}`,
-      children: token.content,
-      style: getStyleForToken(token),
-      key: undefined,
-    };
+  const getTokenProps = useCallback(
+    ({
+      key,
+      className,
+      style,
+      token,
+      ...rest
+    }: TokenInputProps): TokenOutputProps => {
+      const output: TokenOutputProps = {
+        ...rest,
+        className: `token ${token.types.join(" ")}`,
+        children: token.content,
+        style: getStyleForToken(token),
+        key: undefined,
+      };
 
-    if (style !== undefined) {
-      output.style =
-        output.style !== undefined ? { ...output.style, ...style } : style;
-    }
+      if (style !== undefined) {
+        output.style =
+          output.style !== undefined ? { ...output.style, ...style } : style;
+      }
 
-    if (key !== undefined) output.key = key;
-    if (className) output.className += ` ${className}`;
+      if (key !== undefined) output.key = key;
+      if (className) output.className += ` ${className}`;
 
-    return output;
-  };
+      return output;
+    },
+    [getStyleForToken]
+  );
 
   const grammar = Prism.languages[language];
-  const mixedTokens =
-    grammar !== undefined ? Prism.tokenize(code, grammar, language) : [code];
-  const tokens = normalizeTokens(mixedTokens);
+  const mixedTokens = useMemo(() => {
+    return grammar !== undefined
+      ? Prism.tokenize(code, grammar, language)
+      : [code];
+  }, [code, grammar, language]);
+
+  const tokens = useMemo(() => normalizeTokens(mixedTokens), [mixedTokens]);
 
   return {
     tokens,
