@@ -2,7 +2,11 @@ import React from "react";
 import { render } from "react-dom";
 import { Wrapper, Title, Pre, LineNo } from "./styles";
 
-import Highlight, { defaultProps, useHighlight } from "@bendtherules/prism-react-renderer";
+import Highlight, {
+  defaultProps,
+  useHighlight,
+  DefaultRenderer,
+} from "@bendtherules/prism-react-renderer";
 import theme from "prism-react-renderer/themes/oceanicNext";
 
 const exampleCode = `
@@ -16,8 +20,8 @@ return () => <App />;
 
 const App = () => (
   <Wrapper>
-    <h1>Welcome to prism-react-renderer!</h1>
-    <Title>Using &lt;Highlight/&gt; component -</Title>
+    <Title>Welcome to prism-react-renderer!</Title>
+    <h2>Using &lt;Highlight/&gt; component -</h2>
     <Highlight
       {...defaultProps}
       code={exampleCode}
@@ -37,8 +41,17 @@ const App = () => (
         </Pre>
       )}
     </Highlight>
-    <Title>Using useHighlight with explicit render</Title>
+    <h2>Using useHighlight with explicit render</h2>
     <HighlightConsumer />
+    <h2>Using &lt;Highlight/&gt; component with DefaultRenderer-</h2>
+    <Highlight
+      {...defaultProps}
+      code={exampleCode}
+      language="jsx"
+      theme={theme}
+    >
+      {(input) => <DefaultRenderer {...input} />}
+    </Highlight>
   </Wrapper>
 );
 

@@ -40,7 +40,12 @@ const config = {
       plugins: [
         'babel-plugin-macros',
         '@babel/plugin-transform-flow-strip-types',
-        '@babel/plugin-proposal-class-properties'
+        '@babel/plugin-proposal-class-properties',
+        ['@babel/plugin-transform-react-jsx', {
+          pragma: 'React.createElement',
+          pragmaFrag: 'React.Fragment',
+          useBuiltIns: true
+        }],
       ],
     }),
     buble({
