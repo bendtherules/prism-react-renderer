@@ -10,6 +10,8 @@
   Comes with everything to render Prismjs highlighted code directly to React (Native) elements, global-pollution-free!
 </p>
 
+> **This is a fork of prism-react-renderer with hooks like useHighlight**
+
 ## Why?
 
 Maybe you need to render some extra UI with your Prismjs-highlighted code,
@@ -67,9 +69,9 @@ should be installed as one of your project's `dependencies`:
 
 ```sh
 # npm
-npm install --save prism-react-renderer
+npm install --save @bendtherules/prism-react-renderer
 # yarn
-yarn add prism-react-renderer
+yarn add @bendtherules/prism-react-renderer
 ```
 
 > This package also depends on `react`. Please make sure you
@@ -123,7 +125,7 @@ render((
 ```jsx
 import React from "react";
 import { render } from "react-dom";
-import { useHighlight, defaultProps } from "prism-react-renderer";
+import { useHighlight, defaultProps } from "@bendtherules/prism-react-renderer";
 
 const exampleCode = `
 (function someDemo() {
