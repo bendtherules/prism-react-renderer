@@ -10,18 +10,15 @@ const normalizeEmptyLines = (line: Token[]) => {
     line.push({
       types: ["plain"],
       content: "",
-      empty: true
+      empty: true,
     });
   } else if (line.length === 1 && line[0].content === "") {
     line[0].empty = true;
   }
 };
 
-const appendTypes = (
-  types: string[],
-  add: string[] | string
-): string[] => {
-  const typesSize = types.length
+const appendTypes = (types: string[], add: string[] | string): string[] => {
+  const typesSize = types.length;
   if (typesSize > 0 && types[typesSize - 1] === add) {
     return types;
   }
