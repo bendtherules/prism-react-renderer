@@ -5,6 +5,10 @@ export const Wrapper = styled.div`
   text-align: center;
 `
 
+export const Title = styled.h2`
+  text-align: left;
+`
+
 export const Pre = styled.pre`
   text-align: left;
   margin: 1em 0;
