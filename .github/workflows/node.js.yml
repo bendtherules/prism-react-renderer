@@ -25,6 +25,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-    - run: yarn install --frozen-lockfile
-    - run: yarn run prepublishOnly
-#     - run: npm run build --if-present
+    - name: Install dependeies with yarn
+      run: yarn install --frozen-lockfile
+    - name: Check build
+      run: yarn run prepublishOnly
+    - name: Run tests
+      run: yarn run test
