@@ -1,4 +1,4 @@
-[![Maintenance Status][maintenance-image]](#maintenance-status)
+![Github CI](https://github.com/bendtherules/prism-react-renderer/workflows/Github%20CI/badge.svg) [![Maintenance Status][maintenance-image]](#maintenance-status)
 
 > **This is a fork of prism-react-renderer with hooks like useHighlight.**
 
