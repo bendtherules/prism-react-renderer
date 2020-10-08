@@ -1,5 +1,6 @@
 [![Maintenance Status][maintenance-image]](#maintenance-status)
 
+> **This is a fork of prism-react-renderer with hooks like useHighlight.**
 
 <h1 align="center">
   prism-react-renderer 🖌️
@@ -9,8 +10,6 @@
   A lean <a href="https://github.com/PrismJS/prism">Prism</a> highlighter component for React<br>
   Comes with everything to render Prismjs highlighted code directly to React (Native) elements, global-pollution-free!
 </p>
-
-> **This is a fork of prism-react-renderer with hooks like useHighlight**
 
 ## Why?
 
@@ -44,6 +43,9 @@ _(If you just want to use your Prism CSS-file themes, that's also no problem)_
 
 - [Installation](#installation)
 - [Usage](#usage)
+  - [Using component](#using-component)
+  - [Using hooks](#using-hooks)
+  - [DefaultRenderer](#DefaultRenderer)
 - [Basic Props](#basic-props)
   - [children](#children)
   - [language](#language)
@@ -83,7 +85,7 @@ yarn add @bendtherules/prism-react-renderer
 
 <img src="./.readme/basic.png" width="237" alt="Screenshot showing highlighted code block" />
 
-### Using Component -
+### **Using Component**
 
 ```jsx
 import React from "react";
@@ -99,7 +101,7 @@ const exampleCode = `
 return () => <App />;
 `;
 
-render((
+render(
   <Highlight {...defaultProps} code={exampleCode} language="jsx">
     {({ className, style, tokens, getLineProps, getTokenProps }) => (
       <pre className={className} style={style}>
@@ -120,7 +122,14 @@ render((
 `<Highlight />` is the main component exposed by this package, as inspired by
 [downshift](https://github.com/paypal/downshift).
 
-### Using hooks -
+It also exports a `defaultProps` object which for basic usage can simply be spread
+onto the `<Highlight />` component or `useHighlight` hook. It also provides some default theming.
+
+It doesn't render anything itself, it just calls the render function and renders that.
+["Use a render prop!"](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce)!
+`<Highlight>{highlight => <pre>/* your JSX here! */</pre>}</Highlight>`
+
+### **Using hooks**
 
 ```jsx
 import React from "react";
@@ -168,12 +177,45 @@ render((
 );
 ```
 
-It also exports a `defaultProps` object which for basic usage can simply be spread
-onto the `<Highlight />` component or `useHighlight` hook. It also provides some default theming.
+### **DefaultRenderer**
 
-It doesn't render anything itself, it just calls the render function and renders that.
-["Use a render prop!"](https://cdb.reacttraining.com/use-a-render-prop-50de598f11ce)!
-`<Highlight>{highlight => <pre>/* your JSX here! */</pre>}</Highlight>`
+You'll very likely end up changing the rendering logic to suit your usecase, but this is just a convenient component to reuse the default rendering logic seen above.  
+(To be honest, it also helps in testing within the package)
+
+So, if you want to write the above code examples in a shorter way (but without any customization), you can use -
+
+```jsx
+import React from "react";
+import { render } from "react-dom";
+import Highlight, {DefaultRenderer, useHighlight, defaultProps } from "prism-react-renderer";
+
+// 1. using component -
+
+render(
+  <Highlight {...defaultProps} code={exampleCode} language="jsx">
+    {(input) => (
+      <DefaultRenderer {...input}/>
+    )}
+  </Highlight>,
+  document.getElementById('root')
+);
+
+
+// 2. Or, using hooks -
+
+function SomeComponent() {
+  const input = useHighlight({
+    ...defaultProps,
+    code: exampleCode,
+    language: "jsx",
+  });
+
+  return  <DefaultRenderer {...input}/>
+}
+
+render(<SomeComponent />, document.getElementById('root'));
+
+```
 
 ### Line Numbers
 
